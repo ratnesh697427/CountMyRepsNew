@@ -1,0 +1,46 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.mobile.ebc"
+        },
+        "cordova-plugin-tts": {
+            "PACKAGE_NAME": "com.mobile.ebc"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.mobile.ebc"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.mobile.ebc"
+        },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "com.mobile.ebc"
+        },
+        "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        },
+        "cordova-plugin-apple-watch": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        },
+        "com.lefortsoftware.ttsplugin": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        },
+        "cordova-plugin-apprate": {
+            "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
+        },
+        "nl.x-services.plugins.backgroundaudio": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
+        }
+    }
+}

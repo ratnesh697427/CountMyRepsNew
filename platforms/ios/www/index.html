@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+
+<title>COUNT MY REPS</title>
+    
+    <link type="text/css" rel="stylesheet" href="bootstrap-3.3.5/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="css/appstyle.css" />
+    <link rel="stylesheet" type="text/css" media="only screen and (min-device-width: 768px) and (max-device-width: 1024px)" href="css/ipad.css" />
+    
+	<script type="text/javascript" charset="utf-8" src="js/jquery-2.2.0.js"></script>
+    <script type='text/javascript' src='http://code.jquery.com/jquery-1.10.2.min.js'></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="bootstrap-3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/load-json.js"></script>
+    
+	<script type="text/javascript">
+	    
+    $(document).ready(function(){
+                      
+    $(document).bind('deviceready', function(){
+    onDeviceReady();
+    });
+        
+        $("#msg3").hide();
+        $("#otherNews").hide();
+        $("#breathingdiv").empty();
+        $("#currentStage").empty();
+        $("#countType").empty();
+        $("#currentSet").empty();
+        //$("#countWord").empty();
+        $("#totalCount").empty();
+        
+        createDatabaseAS();
+        
+	});
+    
+    function toCount(val){
+        
+        var max = 2500;
+        var len = val.value.length;
+        if (len >= max) {
+            val.value = val.value.substring(0, max);
+            $('#charNum').html('<span style="color:#f00;">No character left</span>');
+        } else {
+            var char = max - len;
+            if (char > 1){
+                $('#charNum').text(char + ' characters left');
+            }else{
+                $('#charNum').text(char + ' character left');
+            }
+        }
+    }
+
+</script>
+
+</head>
+<body>
+    
+<!--------------------------------------Start Counter Page------------------------------------->
+
+<div data-role="page" id="pageone" data-transition="slide">
+  
+  <div data-role="header" style="margin-top:20px;">
+  <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+      <tr id="pheaderC2">
+          <td class="header2" align="center">
+              <img src="img/logo.png" style="height: 35px">
+          </td>
+      </tr>
+      <tr id="pheaderC">
+          <td class="header" align="center">
+              <a class="inactivelink" style="float:left" onClick="_goFavorites('Workout',0);">&nbsp;&nbsp;FAVORITES</a>
+              COUNTER
+              <a class="inactivelink" style="float:right;text-align:right;" onClick="_goSettings();">SETTINGS&nbsp;&nbsp;</a>
+          </td>
+      </tr>
+    </table>
+  </div>
+
+  <div data-role="main" class="ui-content">
+  <div align="center" class="ui-field-contain">
+  <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+      
+      <tr><td align="center" class="fixtopstyle">
+      <table border="0" width="90%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+          <tr>
+              <td align="center" class="currentStageTD"><h5 class="currentStage"></h5></td>
+          </tr>
+          <tr>
+              <td align="center" class="cntrTD"><h1 class="cntr" id="cntrm">0</h1></td>
+          </tr>
+          <tr>
+              <td align="center" class="currentStageTD"><h5 class="runningState"><span></span>&nbsp;<span></span>&nbsp;<span>&nbsp;</span><span></span></h5></td>
+          </tr>
+      </table>
+      </td></tr>
+      
+      <tr><td align="center">
+          <div class="field-content">
+          <table border="0" width="90%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                  <td class="tdtopstyle" colspan="2">
+                      <a href="javascript:void(0);" class="activeTab" id="wrkout" onClick="selectType('wrkout')">WORKOUT</a>
+                      <a href="javascript:void(0);" class="inactiveTab" id="brthing" onClick="selectType('brthing')">BREATHING</a>
+                      <a href="javascript:void(0);" class="inactiveTab" id="stpwtch" onClick="selectType('stpwtch')">STOPWATCH</a>
+                      <a href="javascript:void(0);" class="inactiveTab" id="timer"
+                          onClick="selectType('timer')">TIMER</a>
+                  </td>
+                  <!--<td align="right" class="tdtopstyle">
+                      <select id="exerciseradio" class="ddbox">
+                          <option value="Workout" selected>WORKOUT</option>
+                          <option value="Breathing">BREATHING</option>
+                      </select>
+                  </td>-->
+              </tr>
+              <tr>
+                  <td colspan="2">
+                      <table id="exercisediv" border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                        <tr>
+                            <td class="tdstyle" width="50%" align="left" style="padding-top:15px; border:none;"># Reps</td>
+                        <td class="tdstyle" align="right" style="padding-top:15px; border:none;"><input type="number" pattern="[0-9]*" id="repsDigits" class="form-input" maxlength="4" data-clear-btn="true" placeholder="0" onClick="$('#repsDigits').val($('#repsDigits').val());">
+                        </td>
+                        </tr>
+                        <tr>
+                        <td align="left" style="padding-top:15px;" class="tdstyle">Rest</td>
+                        <td align="right" style="padding-top:15px;" class="tdstyle"><input type="number" pattern="[0-9]*" id="restDigits" class="form-input" maxlength="2" data-clear-btn="true" placeholder="0" onClick="$('#restDigits').val($('#restDigits').val());">
+                        </td>
+                        </tr>
+                      </table>
+                  </td>
+              </tr>
+              <tr id="sttimetd">
+                  <td class="tdstyle" align="left" style="padding-top:15px; border-top:none;">
+                      <select id="settimerradio" class="ddbox" style="color:#fff">
+                          <option value="Sets" selected># Sets</option>
+                          <option value="Time">Time</option>
+                      </select>
+                  </td>
+                  <td class="tdstyle" align="right" id="settimerdiv" style="padding-top:15px; border-top:none;"><input type="number" pattern="[0-9]*" id="settimerDigits" class="form-input" maxlength="2" data-clear-btn="true" placeholder="1" onClick="$('#settimerDigits').val($('#settimerDigits').val());">
+                  </td>
+              </tr>
+              <tr id="sliderCC">
+                  <td width="50%" align="left" class="tdstyle">Counter Interval</td>
+                  <td id="intervaldiv" align="right" class="tdstyle">
+                  </td>
+              </tr>
+              <tr id="sliderC">
+                  <td width="50%" align="left" class="tdstyle">Start Delay</td>
+                  <td id="delaydiv" align="right" class="tdstyle">
+                  </td>
+              </tr>
+              <tr id="atfdiv">
+                  <td align="center" colspan="2" style="padding-top:30px;padding-bottom:140px;">
+                      <button onClick="showUpgrade()" class="favbtn">Add to Favorites</button>
+                  </td>
+              </tr>
+      </table>
+      </div>
+      </td></tr>
+    
+    </table>
+    </div>
+  </div>
+
+  <div class="footer" data-role="footer" id="btndiv2">
+      
+      <button onClick="_doStartCounter();" class="actionbtn">START</button>
+  
+  </div>
+
+</div>
+
+<!-----------------------------------End Counter Page----------------------------->
+<!--------------------------------------Start Favorites Page------------------------------------->
+
+<div data-role="page" id="pagenine" style="display:none;" data-transition="slide">
+    
+    <div data-role="header" style="margin-top:20px;">
+        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+            <tr id="pheaderC2">
+                <td class="header2" align="center">
+                    <img src="img/logo.png" style="height: 35px">
+                        </td>
+            </tr>
+            <tr>
+                <td class="header" align="center">
+                    <a class="inactivelink" style="float:left" onClick="_goSettings();">&nbsp;&nbsp;SETTINGS</a>
+                    FAVORITES
+                    <a class="inactivelink" style="float:right;text-align:right;" onClick="_goCounter();">COUNTER&nbsp;&nbsp;</a>
+                </td>
+            </tr>
+            <tr style="background-color:#eee;">
+                <td align="center" style="padding:15px 8px;font-size:18px;color:#7c7c7c" id="addrdiv2">
+                    <div id="howtocontent">To add a Favorite Workout, click Counter then select Workout.<br>Fill in the reps, rest, sets/time, counter interval, start delay and click the "Add to Favorites" button.</div>
+                    <a style="color:#7C7C7C;font-size:18px;" href="#" onClick="_go2Instruction();"><img src="img/howto.png" width="20" border="0"/>&nbsp;&nbsp;Full Instructions</a></td>
+            </tr>
+            <tr><td align="center" class="fixtopstyle2">
+                <div align="center">
+                <table border="0" width="90%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                    <tr id="favsubdiv">
+                        <td class="tdtopstyleFR" align="center">
+                            <a href="javascript:void(0);" class="activeTab" id="wdiv" onClick="_goFavorites('Workout',0);">WORKOUT</a>
+                            <a href="javascript:void(0);" class="inactiveTab" id="bdiv" onClick="_goFavorites('Breathing',0);">BREATHING</a>
+                              <a href="javascript:void(0);" class="inactiveTab" id="tdiv" onClick="_goFavorites('Timer',0);">TIMER</a>
+                            <a href="javascript:void(0);" class="inactiveTab" id="rdiv" onClick="_goFavorites('Routines',0);">ROUTINES</a>
+                        </td>
+                        
+                    </tr>
+                    <tr id="addrdiv" style="border-bottom:1px solid #7C7C7C;display:none;">
+                        <td width="100%" align="left" style="padding:14px 0;"><a style="color:#fff;font-size:16px;" href="#" onClick="_doCreateRoutine();"><img src="img/circle-plus.png" width="24" border="0"/>&nbsp;&nbsp;Create Routine</a></td>
+                    </tr>
+                </table>
+                </div>
+            </td></tr>
+        </table>
+    </div>
+    
+    <div data-role="main" id="favscreen">
+        <div align="center" class="ui-field-contain">
+            <table border="0" width="90%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                <tr>
+                    <td id="exercisefdiv" align="center">
+                        <div id="noItem" style="text-align:center;padding:30px;display:none;"><span style="font-weight:bold;font-size:18px;">No saved items</span></div>
+                        <div id="savedItemsW"></div>
+                        <div id="savedItemsB"></div>
+                        <div id="savedItemsR"></div>
+                        <br><br><br><br>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="intervalDiv"></div>
+    <div id="createbtn" class="footer" data-role="footer">
+        
+    </div>
+    
+</div>
+
+<!-----------------------------------End Favorites Page----------------------------->
+<!--------------------------------------Start Favorites Inner Page------------------------------------->
+
+<div data-role="page" id="pageten" style="display:none;" data-transition="slide">
+    
+    <div data-role="header" style="margin-top:20px;">
+        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+            <tr id="pheaderC2">
+                <td class="header2" align="center">
+                    <img src="img/logo.png" style="height: 35px">
+                        </td>
+            </tr>
+            <tr>
+                <td class="header" align="center">
+                    <a class="inactivelink" style="float:left" onClick="_goSettings();">&nbsp;&nbsp;SETTINGS</a>
+                    FAVORITES
+                    <a class="inactivelink" style="float:right;text-align:right;" onClick="_goCounter();">COUNTER&nbsp;&nbsp;</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div data-role="main" class="ui-content">
+        <div align="center" class="ui-field-contain">
+            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                <tr><td align="center" class="fixtopstyle">
+                    <table border="0" width="90%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                        <tr>
+                            <td align="center" class="currentStageTD"><h5 class="currentStage"></h5></td>
+                        </tr>
+                        <tr>
+                            <td align="center" class="cntrTD"><h1 class="cntr">0</h1></td>
+                        </tr>
+                        <tr>
+                            <td align="center" class="currentStageTD"><h5 class="runningState"><span></span>&nbsp;<span></span>&nbsp;<span>&nbsp;</span><span></span></h5></td>
+                        </tr>
+                    </table>
+                </td></tr>
+                
+                <tr><td align="center">
+                <div class="field-content">
+                <table border="0" width="90%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                    <tr>
+                        
+                        <td class="tdtopstyle" colspan="2" style="text-align:left">
+                            <a href="javascript:void(0);" class="activeTab" id="wrkout3" style="color:#aeff00;"></a>
+                            <span style="color:#fff; float:right;" id="typespanf"></span>
+                            <!--<a href="javascript:void(0);" class="inactiveTab" id="brthing">BREATHING</a>
+                             <a href="javascript:void(0);" class="inactiveTab" id="stpwtch">STOPWATCH</a>-->
+                        </td>
+                        <!--<td width="50%" align="left" class="tdtopstyle">EXERCISE TYPE</td>
+                         <td class="tdtopstyle" align="right">
+                         </td>-->
+                    </tr>
+                <tr>
+                    <td colspan="2">
+                        <table id="openItem" border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" class="tdstyle" style="border-top:none;"><span style="" id="countingTypef"></span></td>
+                    <td align="right" class="tdstyle" style="border-top:none;"><span style="color:#fff" id="totalCountingf"></span></td>
+                </tr>
+                <tr id="sliderFF">
+                    <td width="50%" align="left" class="tdstyle">Counter Interval</td>
+                    <td align="right" class="tdstyle"><span id="intertvalfdiv" style="color:#fff;"></span></td>
+                </tr>
+                <tr id="sliderF">
+                    <td width="50%" align="left" class="tdstyle"><span id="delayftext"></div></td>
+                    <td align="right" class="tdstyle"><span id="delayfdiv" style="color:#fff;"></span></td>
+                </tr>
+                </table>
+            <br><br><br><br>
+                </div>
+                </td></tr>
+            </table>
+        </div>
+    </div>
+    
+    <div id="favbtndiv" class="footer" data-role="footer">
+        <!--<div class="gtrdy">GET READY</div>-->
+    </div>
+    
+</div>
+
+<!-----------------------------------End Favorites Inner Page----------------------------->
+<!-----------------------------------Start Favorites Edit Page----------------------------->
+
+<div data-role="page" id="pagesix" style="display:none;" data-transition="slide">
+    
+    <div data-role="header" style="margin-top:20px;">
+        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+            <tr id="pheaderC2">
+                <td class="header2" align="center">
+                    <img src="img/logo.png" style="height: 35px">
+                        </td>
+            </tr>
+            <tr>
+                <td class="header" align="center">
+                    <a class="inactivelink" style="float:left" onClick="_goSettings();">&nbsp;&nbsp;SETTINGS</a>
+                    FAVORITES
+                    <a class="inactivelink" style="float:right;text-align:right;" onClick="_goCounter();">COUNTER&nbsp;&nbsp;</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div data-role="main" class="ui-content">
+        <div align="center" class="ui-field-contain">
+            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                
+                <tr><td align="center" class="fixtopstyle">
+                    <table border="0" width="90%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                        <tr>
+                            <td align="center" class="currentStageTD"><h5 class="currentStage"></h5></td>
+                        </tr>
+                        <tr>
+                            <td align="center" class="cntrTD"><h1 class="cntr">0</h1></td>
+                        </tr>
+                        <tr>
+                            <td align="center" class="currentStageTD"><h5 class="runningState"><span></span>&nbsp;<span></span>&nbsp;<span>&nbsp;</span><span></span></h5></td>
+                        </tr>
+                    </table>
+                </td></tr>
+                
+                <tr><td align="center">
+                    <div class="field-content">
+                        <table border="0" width="90%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                            <tr>
+                                <td width="50%" align="left" class="tdtopstyle">EXERCISE TYPE</td>
+                                <td class="tdtopstyle" align="right"><span style="color:#66665E; text-transform:uppercase;" id="openftype"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="50%" align="left" class="tdstyle">NAME</td>
+                                <td align="right" class="tdstyle"><span id="openfname" style="color:#66665E;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <table id="openfRatio" border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" class="tdstyle" style="border-top:none;"><span style="text-transform:uppercase;" id="openfcounttext"></span></td>
+                                <td align="right" class="tdstyle" style="border-top:none;"><span style="color:#66665E" id="openfCountdigit"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="50%" align="left" class="tdstyle">START DELAY</td>
+                                <td align="right" class="tdstyle"><span id="openfdelay" style="color:#66665E;"></span>
+                                </td>
+                            </tr>
+                            <tr id="CIdiv">
+                                <td width="50%" align="left" class="tdstyle">COUNTER INTERVAL</td>
+                                <td align="right" class="tdstyle"><span id="openfInterval" style="color:#66665E;"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td></tr>
+            </table>
+        </div>
+    </div>
+    
+    <div id="editbtndiv" class="footer" data-role="footer">
+        
+    </div>
+    
+</div>
+
+<!-----------------------------------End Favorites Edit Page----------------------------->
+<!------------------------------------ Start Counter Page -------------------------------->
+
+<div data-role="page" id="pagethree" style="display:none;">
+  
+  <div data-role="header" style="margin-top:20px;">
+      <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+          <tr id="pheaderC2">
+              <td class="header2" align="center">
+                  <img src="img/logo.png" style="height: 35px">
+                      </td>
+          </tr>
+          <tr>
+              <td class="header" align="left"><span style="text-transform:uppercase;" id="tabspan"></span></td>
+          </tr>
+        </table>
+  </div>
+  
+  <div data-role="main" class="ui-content">
+  <div align="center" class="ui-field-contain">
+  
+    <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+        
+        <tr><td align="center" class="fixtopstyle">
+            <table border="0" width="90%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                <tr>
+                    <td align="center" class="currentStageTD"><h5 class="currentStage" id="currentStage"></h5></td>
+                </tr>
+                <tr>
+                    <td align="center" class="cntrTD"><h1 class="cntr" id="cntr">0</h1></td>
+                </tr>
+                <tr>
+                    <td align="center" class="currentStageTD"><h5 class="runningState"><span id="countType"></span>&nbsp;<span id="currentSet"></span>&nbsp;<span id="countWord">of</span><span id="totalCount"></span></h5>
+                    </td>
+                </tr>
+            </table>
+        </td></tr>
+        
+        <tr><td align="center">
+            <div class="field-content">
+            <table border="0" width="90%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                <tr>
+                    
+                    <td class="tdtopstyle" colspan="2" style="text-align:left">
+                        <a href="javascript:void(0);" class="activeTab" id="wrkout2" style="color:#aeff00;"></a>
+                        <span style="color:#fff; float:right;" id="typespan"></span>
+                        <!--<a href="javascript:void(0);" class="inactiveTab" id="brthing">BREATHING</a>
+                        <a href="javascript:void(0);" class="inactiveTab" id="stpwtch">STOPWATCH</a>-->
+                    </td>
+                    <!--<td width="50%" align="left" class="tdtopstyle">EXERCISE TYPE</td>
+                    <td class="tdtopstyle" align="right">
+                    </td>-->
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <table id="edetaildiv" border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" class="tdstyle" style="border-top:none;"><span style="" id="countingType"></span></td>
+                    <td align="right" class="tdstyle" style="border-top:none;"><span style="color:#fff" id="totalCounting"></span></td>
+                </tr>
+                <tr id="CntrIntDiv">
+                    <td align="left" class="tdstyle" style="border-top:none;">Counter Interval</td>
+                    <td align="right" class="tdstyle" style="border-top:none;"><span style="color:#fff" id="cntrIntVal"></span>
+                    </td>
+                </tr>
+            </table>
+            </div>
+        </td></tr>
+    
+    </table>
+    
+    </div>
+  </div>
+
+  <div id="btndiv" class="footer" data-role="footer">
+  <!--<div class="gtrdy">GET READY</div>-->
+  </div>
+
+</div>
+
+<!-----------------------------------End Counter Page--------------->
+<!-----------------------------------Start Settings Page----------------------------------->
+
+<div data-role="page" id="pagefour" style="display:none;" data-transition="fade">
+    
+    <div data-role="header" style="margin-top:20px;">
+        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+            <tr id="pheaderS2">
+                <td class="header2" align="center">
+                    <img src="img/logo.png" style="height: 35px">
+                        </td>
+            </tr>
+            <tr id="pheaderS">
+                <td class="header" align="center">
+                    <a class="inactivelink" style="float:left" onClick="_goCounter();">&nbsp;&nbsp;COUNTER</a>
+                    SETTINGS
+                    <a class="inactivelink" style="float:right;text-align:right;" onClick="_goFavorites('Workout',0);">FAVORITES&nbsp;&nbsp;</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div data-role="main" class="ui-content" id="settingspg">
+        <div align="center" class="ui-field-contain" id="settingscontent">
+            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                <tr id="pdiv">
+                    <td align="center" class="grouptext">
+                        <br>
+                        <a href="https://itunes.apple.com/us/app/countmyreps-pro-counts-repetitions/id1114276581?ls=1&mt=8" class="upgradebtn">Upgrade to Pro</a><br><br>
+                        Create and save your Favorite sets<br>
+                        Adjust the rep tempo (from 0.5 to 5 seconds)<br>
+                        Customize your start delay (up to 1 minute)<br>
+                        <br>
+                        
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td align="center" class="tdtopstyle3">
+                        <table border="0" width="90%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                            <tr>
+                                <td align="left" class="ttllst3" style="border-top:none; padding-top:0px;">Voice Language</td>
+                                <td alert="right" class="ttllst3" style="border-top:none; padding-top:0px;">
+                                    <select id="vlangGrp" class="ddbox" style="color:#fff;width:100px;" onChange="_doSetLang(this.value);">
+                                        <!--<option value="en-US" selected>English</option>-->
+                                        <option value="ar-AE">Arabic</option>
+                                        <option value="zh-CN">Chinese</option>
+                                        <option value="en-US" selected>English</option>
+                                        <option value="fr-FR">French</option>
+                                        <option value="hi-IN">Hindi</option>
+                                        <option value="ja-JP">Japanese</option>
+                                        <option value="pt-PT">Portuguese</option>
+                                        <option value="ru-RU">Russian</option>
+                                        <option value="es-ES">Spanish</option>
+                                    </select>
+                                </td>
+                                
+                            </tr>
+                            
+                        </table>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" class="tdtopstyle3">
+                        <table border="0" width="90%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                        <tr>
+                        <td>
+                        
+                        <a href="javascript:void(0);" class="ttllst2"><span style="float:right;">2.5</span>Version</a><br>
+                        <a href="javascript:void(0);" onClick="_go2Instruction();" class="ttllst2"><span class = "glyphicon glyphicon-menu-right"></span>Instructions</a><br>
+                        <a href="javascript:void(0);" onClick="_doShare();" class="ttllst2"><span class = "glyphicon glyphicon-menu-right"></span>Share This App</a><br>
+                        <a href="javascript:void(0);" onClick="_go2Feedback();" class="ttllst2"><span class = "glyphicon glyphicon-menu-right"></span>Feedback</a>
+                        
+                        </td>
+                        </tr>
+                        </table>
+                    </td>
+                </tr>
+                
+                
+                
+            </table>
+        </div>
+    </div>
+    
+    <div data-role="footer">
+        
+    </div>
+    
+</div>
+
+<!------------------------------------End Settings Page------------------------------------->
+<!------------------------------------Start Feedback Page------------------------------------->
+
+<div data-role="page" id="pageseven" style="display:none;" data-transition="fade">
+    
+    <div align="center" data-role="header" style="margin-top:20px;">
+        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+            <tr id="pheaderC2">
+                <td class="header2" align="center">
+                    <img src="img/logo.png" style="height: 35px">
+                        </td>
+            </tr>
+            <tr>
+                <td class="header" align="center">
+                    <a class="inactivelink" style="float:left" onClick="_goSettings();"><span class = "glyphicon glyphicon-menu-left"></span>&nbsp;</a>
+                    FEEDBACK
+                    <a class="inactivelink" style="float:right">&nbsp;</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div id="ui-content-feedback" data-role="main" class="ui-content">
+        <div align="center" class="ui-field-contain">
+            
+            <p id="msg3" class="alert alert-danger"></p>
+            
+            <table border="0" cellpadding="0" cellspacing="0" width="90%" style="border-collapse: collapse;">
+                
+                <tr>
+                    <td align="left" class="tdtopstyle2" style="border-top:none;"><input type="text" id="userName" class="form-input" maxlength="255" placeholder="Your Name" style="text-align:left;"></td>
+                </tr>
+                <tr>
+                    <td align="left" class="tdstyle2"><input type="email" id="userEmail" class="form-input" maxlength="255" placeholder="Your Email" style="text-align:left;"></td>
+                </tr>
+                <tr>
+                    <td align="left" class="tdstyle2">
+                    <textarea id="userFeed" rows="4" cols="10" class="form-input" placeholder="Your Feedback" onKeyUp="toCount(this);" style="text-align:left;"></textarea><br><span id="charNum">2500 characters left</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" class="tdstyle2">
+                    <select id="userNews" class="ddbox" onChange="f2(this.value);" style="width:100%">
+                        <option value="0" Selected>How Did You Hear About Us</option>
+                        <option value="Friends">Friends</option>
+                        <option value="Google">Google</option>
+                        <option value="Yahoo">Yahoo</option>
+                        <option value="Media">Media</option>
+                        <option value="Others">Other</option>
+                    </select>
+                    </td>
+                </tr>
+                <tr id="otherNews">
+                    <td align="left" class="tdstyle2"><input type="text" id="userNews2" value="" class="form-input" maxlength="128" placeholder="Other Sources" autocorrect="off" autocapitalize="none" style="text-align:left;"></td>
+                </tr>
+                
+            </table>
+            
+            
+        </div>
+    </div>
+    
+    <div class="footer" data-role="footer">
+        
+        <button id='feedbtn' href='#' onClick='_doFeed();' class='actionbtn' style='width:50%; border-right:2px solid #aeff00;'>SEND</button><button id='resetfeed' href='#' onClick='_doReset()' class='actionbtn' style='width:50%;'>RESET</button>
+        
+    </div>
+    
+</div>
+
+<!-------------------------------------End Feedback Page------------------------------------->
+
+<!-------------------------------------Start Instructions Page------------------------------->
+<div data-role="page" id="pageinst" style="display:none;" data-transition="fade">
+    
+    <div align="center" data-role="header" style="margin-top:20px;">
+        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+            <tr id="pheaderC2">
+                <td class="header2" align="center">
+                    <img src="img/logo.png" style="height: 35px">
+                        </td>
+            </tr>
+            <tr>
+                <td class="header" align="center">
+                    <a class="inactivelink" style="float:left" onClick="_goSettings();"><span class = "glyphicon glyphicon-menu-left"></span>&nbsp;</a>
+                    INSTRUCTIONS
+                    <a class="inactivelink" style="float:right">&nbsp;</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div id="ui-content-instr" data-role="main" class="ui-content">
+        <div align="center" class="ui-field-contain">
+            
+            
+            <table border="0" cellpadding="0" cellspacing="0" width="90%" style="border-collapse: collapse;">
+            
+                <tr>
+                    <td align="left" class="tdtopstyle2" style="border-bottom:1px solid #aeff00;border-top:none;">
+                    <span class = "glyphicon glyphicon-play-circle" style="color:#fff;"></span><strong style="font-size:22px;color:#fff"> How to use the Counter</strong><br><br>
+                    <strong style="font-size:18px;color:#fff">Workout</strong><br>
+                    <ol style="font-size:18px;color:#aaa">
+                        <li>Select Workout</li>
+                        <li>Click on 'Reps' and input the no. of reps you want</li>
+                        <li>Click on 'Rest' and input the rest time you require between each set</li>
+                        <li>Sets/Time
+                            <ul>
+                            <li>Sets - select the number of sets you wish to perform.</li>
+                            <li>Time – Set the duration of the selected workout (E.g. if you’re doing 20-30 pushups for a minute, select  01:00)</li>
+                            </ul></li>
+                        <li>Click on 'Start Delay' – select the time (time period) you would like the counter to start your exercise after clicking on the 'start button'. (Pro version only)</li>
+                        <li>Click on 'Counter Interval' – By default it set at '1 second.' Should you wish the counter to count faster or slower than a second, adjust the interval. It will count the Reps faster but does not affect the rest time (Pro version only)</li>
+                        <li>Once you have finished putting in the required information for your exercise and wish to save it, click the 'Add to Favorites' button. (Pro version only)</li>
+                        <li>If you're done with the input and ready to start your exercise, click the 'Start' button at the bottom.</li>
+                        <li>If you want to pause, your exercise, simply click the pause button.</li>
+                        <li>If you want to restart your exercise click the reset button.</li>
+                    </ol>
+                    <p>&nbsp;</p>
+                    <strong style="font-size:18px;color:#fff">Breathing</strong><br>
+                    <ol style="font-size:18px;color:#aaa">
+                        <li>Click on Breathing</li>
+                        <li>Click on ‘Inhale’ – input the required seconds for breathing in</li>
+                        <li>Click on ‘Hold’ – input the required seconds for holding your breath after inhaling</li>
+                        <li>Click on ‘Exhale’ – input the required seconds for Exhaling</li>
+                        <li>Click on ‘Hold’ – input the required seconds for holding your breath after exhaling</li>
+                        <li>Sets/Time
+                        <ul>
+                        <li>Sets - Select the number of sets you wish to perform.</li>
+                        <li>Time – Set the duration of the selected Breathing exercise.</li>
+                        </ul></li>
+                        <li>Click on ‘Start Delay’ – select the time (time period) you would like the counter to start your exercise after clicking on the ‘start button’ (Pro version only)</li>
+                        <li>Once you have finished putting in the required information for your exercise and wish to save it, click the ‘Add to Favorites’ button. (Pro version only)</li>
+                        <li>If you’re done with the input and ready to start your exercise, click the ‘Start’ button at the bottom.</li>
+                        <li>If you want to pause, your exercise, simply click the pause button.</li>
+                        <li>If you want to restart your exercise, click the reset button.</li>
+                    </ol>
+                    <p>&nbsp;</p>
+                    <strong style="font-size:18px;color:#fff">Stopwatch</strong><br>
+                    <ol style="font-size:18px;color:#aaa">
+                        <li>Click on Stopwatch</li>
+                        <li>To start click the ‘Start’ button at the bottom.</li>
+                        <li>To stop click the ‘Stop’ button at the bottom left.</li>
+                        <li>To resume the stopwatch click the ‘Start’ button at the bottom left (it replaces the 'Stop' button).</li>
+                        <li>To reset the stopwatch click the ‘Reset’ button at the bottom right.</li>
+                    </ol>
+                    <p>Note: The stopwatch cannot be saved to Favorites</p>
+                    <p>&nbsp;</p>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td align="left" class="tdtopstyle2" style="border-bottom:1px solid #aeff00;">
+                    <span class = "glyphicon glyphicon-play-circle" style="color:#fff;"></span><strong style="font-size:22px;color:#fff"> How to use Favorites</strong><br><br>
+                    <strong style="font-size:18px;color:#fff">Save/Create a Favorite (Pro Version Only)</strong><br>
+                    <ol style="font-size:18px;color:#aaa">
+                        <li>Select the required values in the counter screen (Workout/Breathing)</li>
+                        <li>Scroll down and click on 'Add to Favorites'</li>
+                        <li>Input a name for your exercise and click 'Save'</li>
+                    </ol>
+                    <p>Note: The stopwatch cannot be saved to Favorites or added to Routines.</p>
+                    <p>&nbsp;</p>
+                    <strong style="font-size:18px;color:#fff">View/Play Favorites</strong><br><br>
+                    <ol style="font-size:18px;color:#aaa">
+                        <li>Select 'Workout' or 'Breathing' from the following:  You will see Workout, Breathing, Routines at the top.</li>
+                        <li>To view workouts click on "Workout" and all the workouts added to Favorites will be displayed below. The same shall happen if you click on "Breathing"</li>
+                        <li>If you want to see the details of a Favorite click the details button at the side to view the full information.</li>
+                        <li>To hide the information, click the hide button.</li>
+                        <li>To start a Favorite, simply click on the 'Play' icon to start a saved exercise.</li>
+                    </ol>
+                    <p>&nbsp;</p>
+                    <strong style="font-size:18px;color:#fff">Edit/Delete Favorites (Pro Version Only)</strong><br>
+                    <ol style="font-size:18px;color:#aaa">
+                        <li>If you want to edit a Favorite click on the edit icon and edit the selected icon as per your will. Editing a Favorite item will not affect the Favorite Item added in Routines.</li>
+                        <li>If you want to delete a Favorite click on the delete icon. Deleting a Favorite item will not affect the Favorite Item added in Routines.</li>
+                    </ol>
+                    <p>&nbsp;</p>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td align="left" class="tdtopstyle2" style="border-bottom:1px solid #aeff00;">
+                    <span class = "glyphicon glyphicon-play-circle" style="color:#fff;"></span><strong style="font-size:22px;color:#fff"> How to use Routines</strong><br><br>
+                    <strong style="font-size:18px;color:#fff">Create a Routine (Pro Version Only)</strong><br>
+                    <ol style="font-size:18px;color:#aaa">
+                        <li>The Routine is created by selecting from Favorites</li>
+                        <li>Go to Favorites</li>
+                        <li>Click on Routines</li>
+                        <li>Select 'Create Routine'</li>
+                        <li>Select any one of the Favorites saved under Workout/Breathing</li>
+                        <li>Select the Interval time (‘Interval  - Min Sec’) between each workout at the bottom, just above the ‘Next button’ (e.g. if you want a 30 sec gap after a workout, select ‘SEC’ and change it to ‘30’)</li>
+                        <li>Click the ‘NEXT’ button</li>
+                        <li>Repeat steps "5, 6 and 7" till you have completed selecting the items required for your Routine and click the ‘SAVE’ button.</li>
+                        <li>Name your Routine and click ‘Save’.</li>
+                    </ol>
+                    <p>&nbsp;</p>
+                    <strong style="font-size:18px;color:#fff">View/Play Routines</strong><br><br>
+                    <ol style="font-size:18px;color:#aaa">
+                        <li>Select 'Routines' from the following:  You will see Workout, Breathing, Routines at the top.</li>
+                        <li>If you want to see the details of a Routine click the details button at the side to view the full information.</li>
+                        <li>To hide the information, click the hide button.</li>
+                        <li>To start a Routine, simply click on the 'Play' icon.</li>
+                    </ol>
+                    <p>&nbsp;</p>
+                    
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td align="left" class="tdtopstyle2" style="border-bottom:1px solid #aaa;">
+                    <span class = "glyphicon glyphicon-play-circle" style="color:#fff;"></span><strong style="font-size:22px;color:#fff"> Settings Page</strong><br><br>
+                    <p>The settings page can be found on the top right of the 'Counter' Page and on the top left of the 'Favorites' page</p>
+                    <ol style="font-size:18px;color:#aaa">
+                        <li>To change the voice counter's language of speech, select the language you want from the Voice Language dropdown. </li>
+                        <li>Version –  Displays the current version of the app</li>
+                        <li>Instructions – Displays how to use the app</li>
+                        <li>If you want to share this app with your friends click on ‘Share this app’ and choose your preferable social media platform and send.</li>
+                        <li>If you have any feedback, click on ‘Feedback’ and fill in the form accordingly and send it to us. Or visit us at <a href="http://www.countmyrepsapp.com" target="_blank" style="color:#fff">www.countmyrepsapp.com</a> and contact us by clicking the ‘Get in Touch’ button.</li>
+                    </ol>
+                    <p>&nbsp;</p>
+                    
+                    </td>
+                </tr>
+                
+            </table>
+            <p>&nbsp;</p>
+                    <p style="color:#aeff00;text-align:center;font-size:20px;"><a href="http://www.countmyrepsapp.com/guide.php" target="_blank" style="color:#aeff00">Checkout our Workout Guide</a></p>
+                    <p>&nbsp;</p>
+            
+        </div>
+    </div>
+    
+    <div class="footer" data-role="footer" id="footInst">
+        
+        <!--button id='feedbtn' href='#' onClick='_goSettings();' class='actionbtn' style='width:100%;'>BACK</button-->
+        
+    </div>
+    
+</div>
+<!-------------------------------------End Instructions Page--------------------------------->
+
+<!------------------------------- The Upgrade Modal ---------------------->
+<div id="myModal" class="modal">
+    
+    
+    
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-body">
+            <a href="javascript:void(0);" onClick="hideUpgrade()"><img src="img/circle-cross.png" width="20" style="float:right;"></a>
+            <!--p><img src="img/padlock.png" width="50"></p-->
+            <p style="text-align:center;font-size:34px;">&nbsp; &nbsp; GO PRO</p>
+            <p>
+            <br>
+            <ul type="square">
+                <li>Start saving your <span class='enlighten'>Favorite</span> exercises</li>
+                <li>Combine your <span class='enlighten'>Favorite</span> exercises into a <span class='enlighten'>Routine</span></li>
+                <li>Adjust the <span class='enlighten'>Start Delay</span> to suit your workout</li>
+                <li>Count at your own pace by adjusting the <span class='enlighten'>Counter Interval</span></li>
+            </ul>
+            
+            </p>
+        </div>
+        <div class="modal-footer">
+            
+            <button onClick="hideUpgrade();_goSettings();" id="upgradeit" class="modal-footer-button">BUY NOW</button>
+            <!--button id="cancel" onClick="hideUpgrade();" class="modal-footer-button">Cancel</button-->
+            
+        </div>
+    </div>
+    
+</div>
+
+<!-----------------------------------End Modal----------------------------->
+
+</body>
+</html>

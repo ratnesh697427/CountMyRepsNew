@@ -1,0 +1,19 @@
+{
+    "name": "com.counterfit.countmyreps",
+    "version": "0.0.1",
+    "displayName": "Exercise and Breathing Counter",
+    "cordova": {
+        "platforms": [
+            "android",
+            "ios"
+        ],
+        "plugins": {
+            "cordova-plugin-whitelist": {}
+        }
+    },
+    "dependencies": {
+        "cordova-ios": "~4.0.1",
+        "cordova-plugin-whitelist": "1",
+        "cordova-android": "~6.2.3"
+    }
+}

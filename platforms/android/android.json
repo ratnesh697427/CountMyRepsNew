@@ -1,0 +1,240 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "AndroidManifest.xml": {
+                "parents": {
+                    "/manifest/application": [
+                        {
+                            "xml": "<activity android:label=\"@string/app_name\" android:name=\"com.lefortsoftware.ttsplugin\"><intent-filter /></activity>",
+                            "count": 1
+                        }
+                    ],
+                    "/*": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "res/xml/config.xml": {
+                "parents": {
+                    "widget": [
+                        {
+                            "xml": "<feature name=\"TtsPlugin\"><param name=\"android-package\" value=\"com.lefortsoftware.ttsplugin.TtsPlugin\" /></feature>",
+                            "count": 1
+                        }
+                    ],
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Globalization\"><param name=\"android-package\" value=\"org.apache.cordova.globalization.Globalization\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"AppRate\"><param name=\"android-package\" value=\"org.pushandplay.cordova.apprate.AppRate\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SocialSharing\"><param name=\"android-package\" value=\"nl.xservices.plugins.SocialSharing\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SQLitePlugin\"><param name=\"android-package\" value=\"io.liteglue.SQLitePlugin\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"TTS\"><param name=\"android-package\" value=\"com.wordsbaking.cordova.tts.TTS\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "com.lefortsoftware.ttsplugin": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        },
+        "cordova-plugin-apple-watch": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        },
+        "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        },
+        "cordova-plugin-apprate": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        },
+        "cordova-plugin-tts": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        },
+        "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        },
+        "nl.x-services.plugins.backgroundaudio": {
+            "PACKAGE_NAME": "com.counterfit.countmyreps"
+        }
+    },
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "id": "com.lefortsoftware.ttsplugin.TtsPlugin",
+            "file": "plugins/com.lefortsoftware.ttsplugin/www/TtsPlugin.js",
+            "pluginId": "com.lefortsoftware.ttsplugin",
+            "clobbers": [
+                "ttsPlugin"
+            ]
+        },
+        {
+            "id": "cordova-plugin-apple-watch.AppleWatch",
+            "file": "plugins/cordova-plugin-apple-watch/www/applewatch.js",
+            "pluginId": "cordova-plugin-apple-watch",
+            "clobbers": [
+                "applewatch"
+            ]
+        },
+        {
+            "id": "cordova-plugin-dialogs.notification",
+            "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+            "pluginId": "cordova-plugin-dialogs",
+            "merges": [
+                "navigator.notification"
+            ]
+        },
+        {
+            "id": "cordova-plugin-dialogs.notification_android",
+            "file": "plugins/cordova-plugin-dialogs/www/android/notification.js",
+            "pluginId": "cordova-plugin-dialogs",
+            "merges": [
+                "navigator.notification"
+            ]
+        },
+        {
+            "id": "cordova-plugin-globalization.GlobalizationError",
+            "file": "plugins/cordova-plugin-globalization/www/GlobalizationError.js",
+            "pluginId": "cordova-plugin-globalization",
+            "clobbers": [
+                "window.GlobalizationError"
+            ]
+        },
+        {
+            "id": "cordova-plugin-globalization.globalization",
+            "file": "plugins/cordova-plugin-globalization/www/globalization.js",
+            "pluginId": "cordova-plugin-globalization",
+            "clobbers": [
+                "navigator.globalization"
+            ]
+        },
+        {
+            "id": "cordova-plugin-apprate.AppRate",
+            "file": "plugins/cordova-plugin-apprate/www/AppRate.js",
+            "pluginId": "cordova-plugin-apprate",
+            "clobbers": [
+                "AppRate"
+            ]
+        },
+        {
+            "id": "cordova-plugin-apprate.locales",
+            "file": "plugins/cordova-plugin-apprate/www/locales.js",
+            "pluginId": "cordova-plugin-apprate",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-network-information.network",
+            "file": "plugins/cordova-plugin-network-information/www/network.js",
+            "pluginId": "cordova-plugin-network-information",
+            "clobbers": [
+                "navigator.connection",
+                "navigator.network.connection"
+            ]
+        },
+        {
+            "id": "cordova-plugin-network-information.Connection",
+            "file": "plugins/cordova-plugin-network-information/www/Connection.js",
+            "pluginId": "cordova-plugin-network-information",
+            "clobbers": [
+                "Connection"
+            ]
+        },
+        {
+            "id": "cordova-plugin-tts.tts",
+            "file": "plugins/cordova-plugin-tts/www/tts.js",
+            "pluginId": "cordova-plugin-tts",
+            "clobbers": [
+                "TTS"
+            ]
+        },
+        {
+            "id": "cordova-plugin-whitelist.whitelist",
+            "file": "plugins/cordova-plugin-whitelist/whitelist.js",
+            "pluginId": "cordova-plugin-whitelist",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-x-socialsharing.SocialSharing",
+            "file": "plugins/cordova-plugin-x-socialsharing/www/SocialSharing.js",
+            "pluginId": "cordova-plugin-x-socialsharing",
+            "clobbers": [
+                "window.plugins.socialsharing"
+            ]
+        },
+        {
+            "id": "cordova-sqlite-storage.SQLitePlugin",
+            "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+            "pluginId": "cordova-sqlite-storage",
+            "clobbers": [
+                "SQLitePlugin"
+            ]
+        }
+    ],
+    "plugin_metadata": {
+        "com.lefortsoftware.ttsplugin": "0.1.0",
+        "cordova-plugin-apple-watch": "0.11.3",
+        "cordova-plugin-dialogs": "1.1.1",
+        "cordova-plugin-globalization": "1.0.3",
+        "cordova-plugin-apprate": "1.2",
+        "cordova-plugin-network-information": "1.0.1",
+        "cordova-plugin-tts": "0.2.3",
+        "cordova-plugin-whitelist": "1.0.0",
+        "cordova-plugin-x-socialsharing": "5.0.7",
+        "cordova-sqlite-storage": "0.7.14",
+        "nl.x-services.plugins.backgroundaudio": "1.0.1"
+    }
+}
